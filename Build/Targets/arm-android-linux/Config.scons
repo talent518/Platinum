@@ -14,21 +14,9 @@ ANDROID_NDK_ROOT=os.getenv('ANDROID_NDK_ROOT')
 if not ANDROID_NDK_ROOT:
     raise Exception('ANDROID_NDK_ROOT environment variable not set')
 
-# detect the host system on which we're running
-if env.has_key('android_host_system') and env['android_host_system']:
-	ANDROID_HOST_SYSTEM = env['android_host_system']
-else:
-	PLATFORM_TO_TARGET_MAP = {
-    	'linux-i386' : 'linux-x86',
-    	'linux2'     : 'linux-x86',
-    	'win32'      : 'windows',
-    	'cygwin'     : 'windows',
-    	'darwin'     : 'darwin-x86'
-	}
-	if sys.platform in PLATFORM_TO_TARGET_MAP:
-		ANDROID_HOST_SYSTEM = PLATFORM_TO_TARGET_MAP[sys.platform]
-	else:
-		raise Exception('Android Host Platform cannot be determined')
+ANDROID_HOST_SYSTEM=os.getenv('ANDROID_HOST_SYSTEM')
+if not ANDROID_NDK_ROOT:
+    raise Exception('ANDROID_HOST_SYSTEM environment variable not set')
 
 # set defaults
 ANDROID_ARCH         = 'arm'
