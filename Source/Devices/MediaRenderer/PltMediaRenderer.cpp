@@ -104,8 +104,8 @@ PLT_MediaRenderer::SetupServices()
 			this,
 			"urn:schemas-upnp-org:service:AVTransport:1",
 			"urn:upnp-org:serviceId:AVTransport",
-			"AVTransport"/*,
-			"urn:schemas-upnp-org:metadata-1-0/AVT/"*/);
+			"AVTransport",
+			"urn:schemas-upnp-org:metadata-1-0/AVT/");
 		NPT_CHECK_FATAL(service->SetSCPDXML((const char*) RDR_AVTransportSCPD));
 		NPT_CHECK_FATAL(AddService(service.AsPointer()));
 
@@ -191,8 +191,8 @@ PLT_MediaRenderer::SetupServices()
 			this,
 			"urn:schemas-upnp-org:service:RenderingControl:1",
 			"urn:upnp-org:serviceId:RenderingControl",
-			"RenderingControl"/*,
-			"urn:schemas-upnp-org:metadata-1-0/RCS/"*/);
+			"RenderingControl",
+			"urn:schemas-upnp-org:metadata-1-0/RCS/");
 		NPT_CHECK_FATAL(service->SetSCPDXML((const char*) RDR_RenderingControlSCPD));
 		NPT_CHECK_FATAL(AddService(service.AsPointer()));
 
@@ -231,16 +231,16 @@ PLT_MediaRenderer::UpdateServices(const char* value,const char* data)
 
 	if(*(value+2) == ':' && *(value+5) == ':')
 	{
-		if(*(data+0) == 'd')
-		{
+		/*if(*(data+0) == 'd')
+		{*/
 			serviceUpdate->SetStateVariable("CurrentTrackDuration", value);
 			serviceUpdate->SetStateVariable("CurrentMediaDuration", value);
-		}
+		/*}
 		else
-		{
+		{*/
 			serviceUpdate->SetStateVariable("RelativeTimePosition", value);
 			serviceUpdate->SetStateVariable("AbsoluteTimePosition", value);
-		}
+		//}
 	}
 	else
 	{
@@ -324,10 +324,13 @@ PLT_MediaRenderer::OnAction(PLT_ActionReference&          action,
 
 	}
 	if (name.Compare("SetMute", true) == 0) {
-		  return OnSetMute(action);
+		return OnSetMute(action);
 	}
 	if (name.Compare("GetMediaInfo", true) == 0) {
-		  return OnGetMediaInfo(action);
+		return OnGetMediaInfo(action);
+	}
+	if (name.Compare("GetPositionInfo", true) == 0) {
+		return OnGetPositionInfo(action);
 	}
 
 	// other actions rely on state variables
