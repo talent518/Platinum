@@ -46,26 +46,28 @@
 class PLT_MediaRendererDelegate
 {
 public:
-    virtual ~PLT_MediaRendererDelegate() {}
+	virtual ~PLT_MediaRendererDelegate() {}
 
-    // ConnectionManager
-    virtual NPT_Result OnGetCurrentConnectionInfo(PLT_ActionReference& action) = 0;
+	// ConnectionManager
+	virtual NPT_Result OnGetCurrentConnectionInfo(PLT_ActionReference& action) = 0;
 
-    // AVTransport
-    virtual NPT_Result OnNext(PLT_ActionReference& action) = 0;
-    virtual NPT_Result OnPause(PLT_ActionReference& action) = 0;
-    virtual NPT_Result OnPlay(PLT_ActionReference& action) = 0;
-    virtual NPT_Result OnPrevious(PLT_ActionReference& action) = 0;
-    virtual NPT_Result OnSeek(PLT_ActionReference& action) = 0;
-    virtual NPT_Result OnStop(PLT_ActionReference& action) = 0;
-    virtual NPT_Result OnSetAVTransportURI(PLT_ActionReference& action) = 0;
-    virtual NPT_Result OnSetPlayMode(PLT_ActionReference& action) = 0;
+	// AVTransport
+	virtual NPT_Result OnNext(PLT_ActionReference& action) = 0;
+	virtual NPT_Result OnPause(PLT_ActionReference& action) = 0;
+	virtual NPT_Result OnPlay(PLT_ActionReference& action) = 0;
+	virtual NPT_Result OnPrevious(PLT_ActionReference& action) = 0;
+	virtual NPT_Result OnSeek(PLT_ActionReference& action) = 0;
+	virtual NPT_Result OnStop(PLT_ActionReference& action) = 0;
+	virtual NPT_Result OnSetAVTransportURI(PLT_ActionReference& action) = 0;
+	virtual NPT_Result OnSetPlayMode(PLT_ActionReference& action) = 0;
 
-    // RenderingControl
-    virtual NPT_Result OnSetVolume(PLT_ActionReference& action) = 0;
-    virtual NPT_Result OnSetVolumeDB(PLT_ActionReference& action) = 0;
-    virtual NPT_Result OnGetVolumeDBRange(PLT_ActionReference& action) = 0;
-    virtual NPT_Result OnSetMute(PLT_ActionReference& action) = 0;
+	// RenderingControl
+	virtual NPT_Result OnSetVolume(PLT_ActionReference& action) = 0;
+	virtual NPT_Result OnSetVolumeDB(PLT_ActionReference& action) = 0;
+	virtual NPT_Result OnGetVolumeDBRange(PLT_ActionReference& action) = 0;
+	virtual NPT_Result OnSetMute(PLT_ActionReference& action) = 0;
+	virtual NPT_Result OnGetMediaInfo(PLT_ActionReference& action) = 0;
+	virtual NPT_Result OnGetPositionInfo(PLT_ActionReference& action) = 0;
 };
 
 /*----------------------------------------------------------------------
@@ -74,44 +76,47 @@ public:
 class PLT_MediaRenderer : public PLT_DeviceHost
 {
 public:
-    PLT_MediaRenderer(const char*  friendly_name,
-                      bool         show_ip = false,
-                      const char*  uuid = NULL,
-                      unsigned int port = 0,
-                      bool         port_rebind = false);
-    // methods
-    virtual void SetDelegate(PLT_MediaRendererDelegate* delegate) { m_Delegate = delegate; }
+	PLT_MediaRenderer(const char*  friendly_name,
+					  bool         show_ip = false,
+					  const char*  uuid = NULL,
+					  unsigned int port = 0,
+					  bool         port_rebind = false);
+	// methods
+	virtual void SetDelegate(PLT_MediaRendererDelegate* delegate) { m_Delegate = delegate; }
 
-    // PLT_DeviceHost methods
-    virtual NPT_Result SetupServices();
-    virtual NPT_Result OnAction(PLT_ActionReference&          action, 
-                                const PLT_HttpRequestContext& context);
+	// PLT_DeviceHost methods
+	virtual NPT_Result SetupServices();
+	virtual NPT_Result UpdateServices(const char* value,const char* data);//add by pngcui
+	virtual NPT_Result OnAction(PLT_ActionReference&          action, 
+								const PLT_HttpRequestContext& context);
 
 protected:
-    virtual ~PLT_MediaRenderer();
+	virtual ~PLT_MediaRenderer();
 
-    // PLT_MediaRendererInterface methods
-    // ConnectionManager
-    virtual NPT_Result OnGetCurrentConnectionInfo(PLT_ActionReference& action);
+	// PLT_MediaRendererInterface methods
+	// ConnectionManager
+	virtual NPT_Result OnGetCurrentConnectionInfo(PLT_ActionReference& action);
 
-    // AVTransport
-    virtual NPT_Result OnNext(PLT_ActionReference& action);
-    virtual NPT_Result OnPause(PLT_ActionReference& action);
-    virtual NPT_Result OnPlay(PLT_ActionReference& action);
-    virtual NPT_Result OnPrevious(PLT_ActionReference& action);
-    virtual NPT_Result OnSeek(PLT_ActionReference& action);
-    virtual NPT_Result OnStop(PLT_ActionReference& action);
-    virtual NPT_Result OnSetAVTransportURI(PLT_ActionReference& action);
-    virtual NPT_Result OnSetPlayMode(PLT_ActionReference& action);
+	// AVTransport
+	virtual NPT_Result OnNext(PLT_ActionReference& action);
+	virtual NPT_Result OnPause(PLT_ActionReference& action);
+	virtual NPT_Result OnPlay(PLT_ActionReference& action);
+	virtual NPT_Result OnPrevious(PLT_ActionReference& action);
+	virtual NPT_Result OnSeek(PLT_ActionReference& action);
+	virtual NPT_Result OnStop(PLT_ActionReference& action);
+	virtual NPT_Result OnSetAVTransportURI(PLT_ActionReference& action);
+	virtual NPT_Result OnSetPlayMode(PLT_ActionReference& action);
 
-    // RenderingControl
-    virtual NPT_Result OnSetVolume(PLT_ActionReference& action);
-    virtual NPT_Result OnSetVolumeDB(PLT_ActionReference &action);
-    virtual NPT_Result OnGetVolumeDBRange(PLT_ActionReference &action);
-    virtual NPT_Result OnSetMute(PLT_ActionReference& action);
+	// RenderingControl
+	virtual NPT_Result OnSetVolume(PLT_ActionReference& action);
+	virtual NPT_Result OnSetVolumeDB(PLT_ActionReference &action);
+	virtual NPT_Result OnGetVolumeDBRange(PLT_ActionReference &action);
+	virtual NPT_Result OnSetMute(PLT_ActionReference& action);
+	virtual NPT_Result OnGetMediaInfo(PLT_ActionReference& action);
+	virtual NPT_Result OnGetPositionInfo(PLT_ActionReference& action);
 
 private:
-    PLT_MediaRendererDelegate* m_Delegate;
+	PLT_MediaRendererDelegate* m_Delegate;
 };
 
 #endif /* _PLT_MEDIA_RENDERER_H_ */
