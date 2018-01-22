@@ -1,0 +1,1 @@
+版本库 https://github.com/talent518/MediaRender 中使用的jni库。
