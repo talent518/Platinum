@@ -77,10 +77,15 @@ PLT_MediaRenderer::PLT_MediaRenderer(const char*  friendly_name,
 				   port_rebind),
 	m_Delegate(NULL)
 {
-	m_ModelDescription = "Plutinosoft AV Media Renderer Device";
-	m_ModelName        = "AV Renderer Device";
-	m_ModelURL         = "http://www.plutinosoft.com/platinum";
+	m_Manufacturer     = "ABao";
+	m_ManufacturerURL     = "https://github.com/talent518";
+	m_ModelDescription = "ABao Dlna Media Renderer";
+	m_ModelName        = "ABao Dlna Media Renderer";
+	m_ModelURL         = "https://github.com/talent518/MediaRender";
 	m_DlnaDoc          = "DMR-1.50";
+	m_ModelNumber      = "1.0";
+	m_SerialNumber     = "20180123130516";
+	m_PresentationURL  = "https://github.com/talent518";
 }
 
 /*----------------------------------------------------------------------
