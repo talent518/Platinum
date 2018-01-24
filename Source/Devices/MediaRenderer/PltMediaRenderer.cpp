@@ -235,16 +235,16 @@ PLT_MediaRenderer::UpdateServices(const char* value, const char* data)
 
 	if(*(value+2) == ':' && *(value+5) == ':')
 	{
-		/*if(*(data+0) == 'd')
-		{*/
+		if(*(data+0) == 'd')
+		{
 			serviceUpdate->SetStateVariable("CurrentTrackDuration", value);
-			serviceUpdate->SetStateVariable("CurrentMediaDuration", value);
-		/*}
+		}
 		else
-		{*/
+		{
+			serviceUpdate->SetStateVariable("CurrentMediaDuration", value);
 			serviceUpdate->SetStateVariable("RelativeTimePosition", value);
 			serviceUpdate->SetStateVariable("AbsoluteTimePosition", value);
-		//}
+		}
 	}
 	else
 	{
