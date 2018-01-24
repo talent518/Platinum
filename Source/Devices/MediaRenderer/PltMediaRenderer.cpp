@@ -266,19 +266,18 @@ PLT_MediaRenderer::OnAction(PLT_ActionReference&          action,
 
 	/* parse the action name */
 	NPT_String name = action->GetActionDesc().GetName();
+	NPT_String serviceType = action->GetActionDesc().GetService()->GetServiceType();
 
-	LOGI2("OnAction -> %s", name.GetChars());
+	LOGI3("OnAction -> %s => %s", name.GetChars(), serviceType.GetChars());
 
 	// since all actions take an instance ID and we only support 1 instance
 	// verify that the Instance ID is 0 and return an error here now if not
-	NPT_String serviceType = action->GetActionDesc().GetService()->GetServiceType();
 	if (serviceType.Compare("urn:schemas-upnp-org:service:AVTransport:1", true) == 0) {
 		if (NPT_FAILED(action->VerifyArgumentValue("InstanceID", "0"))) {
 			action->SetError(718, "Not valid InstanceID");
 			return NPT_FAILURE;
 		}
 	}
-	serviceType = action->GetActionDesc().GetService()->GetServiceType();
 	if (serviceType.Compare("urn:schemas-upnp-org:service:RenderingControl:1", true) == 0) {
 		if (NPT_FAILED(action->VerifyArgumentValue("InstanceID", "0"))) {
 			action->SetError(702, "Not valid InstanceID");
@@ -353,10 +352,6 @@ failure:
 NPT_Result
 PLT_MediaRenderer::OnGetCurrentConnectionInfo(PLT_ActionReference& action)
 {
-	if (m_Delegate) {
-		return m_Delegate->OnGetCurrentConnectionInfo(action);
-	}
-
 	if (NPT_FAILED(action->VerifyArgumentValue("ConnectionID", "0"))) {
 		action->SetError(706,"No Such Connection.");
 		return NPT_FAILURE;
@@ -382,6 +377,10 @@ PLT_MediaRenderer::OnGetCurrentConnectionInfo(PLT_ActionReference& action)
 	}
 	if (NPT_FAILED(action->SetArgumentValue("Status", "Unknown"))) {
 		return NPT_FAILURE;
+	}
+
+	if (m_Delegate) {
+		return m_Delegate->OnGetCurrentConnectionInfo(action);
 	}
 
 	return NPT_SUCCESS;

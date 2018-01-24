@@ -13,7 +13,7 @@ extern "C" {
  * Method:    startMediaRender
  * Signature: ([B[B)I
  */
-JNIEXPORT jint JNICALL Java_com_geniusgithub_mediarender_jni_PlatinumJniProxy_startMediaRender(JNIEnv *, jclass, jbyteArray, jbyteArray);
+JNIEXPORT void JNICALL Java_com_geniusgithub_mediarender_jni_PlatinumJniProxy_startMediaRender(JNIEnv *, jclass, jbyteArray, jbyteArray);
 
 /*
  * Class:     com_geniusgithub_mediarender_jni_PlatinumJniProxy
@@ -27,7 +27,7 @@ JNIEXPORT void JNICALL Java_com_geniusgithub_mediarender_jni_PlatinumJniProxy_st
  * Method:    responseGenaEvent
  * Signature: (I[B[B)Z
  */
-JNIEXPORT jboolean JNICALL Java_com_geniusgithub_mediarender_jni_PlatinumJniProxy_responseGenaEvent(JNIEnv *, jclass, jint, jbyteArray, jbyteArray);
+JNIEXPORT void JNICALL Java_com_geniusgithub_mediarender_jni_PlatinumJniProxy_responseGenaEvent(JNIEnv *, jclass, jint, jbyteArray, jbyteArray);
 
 #ifdef __cplusplus
 }

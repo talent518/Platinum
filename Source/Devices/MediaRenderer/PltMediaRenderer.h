@@ -89,9 +89,9 @@ public:
 	virtual NPT_Result UpdateServices(const char* value,const char* data);//add by pngcui
 	virtual NPT_Result OnAction(PLT_ActionReference&          action, 
 								const PLT_HttpRequestContext& context);
+	virtual ~PLT_MediaRenderer();
 
 protected:
-	virtual ~PLT_MediaRenderer();
 
 	// PLT_MediaRendererInterface methods
 	// ConnectionManager

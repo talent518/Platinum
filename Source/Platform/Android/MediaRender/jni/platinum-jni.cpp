@@ -23,9 +23,7 @@
 #include "PltUPnP.h"
 #include "PltDeviceHost.h"
 
-#include "PltFileMediaServer.h"
 #include "PltMediaRendererDelegate.h"
-
 #include "PltService.h"
 
 ////////////////pngcui///////////////////////
@@ -33,12 +31,11 @@
 #define TAG "Platinum-jni" 
 #define LOGI(...) __android_log_print(ANDROID_LOG_INFO,TAG ,__VA_ARGS__)
 
-
-PLT_DeviceHostReference device;
 PLT_UPnP upnp;
 
-PltMediaRendererDelegate *mediaRenderDelegate;
-PLT_MediaRenderer *mediaRenderer;
+PLT_DeviceHostReference *device = NULL;
+PltMediaRendererDelegate *mediaRenderDelegate = NULL;
+PLT_MediaRenderer *mediaRenderer = NULL;
 
 JavaVM *g_vm = NULL;  
 jclass g_inflectClass = NULL;  
@@ -118,11 +115,15 @@ char* ConvertJByteaArrayToChars(JNIEnv *env, jbyteArray bytearray, jbyte *&bytes
  * Method:    startMediaRender
  * Signature: ()J
  */
-JNIEXPORT jint JNICALL Java_com_geniusgithub_mediarender_jni_PlatinumJniProxy_startMediaRender
+JNIEXPORT void JNICALL Java_com_geniusgithub_mediarender_jni_PlatinumJniProxy_startMediaRender
 		(JNIEnv *env, jclass, jbyteArray name, jbyteArray uuid)
 {
-	NPT_LOG_INFO("start");
-	int ret = -1;
+	if(mediaRenderDelegate != NULL || mediaRenderer != NULL || device != NULL) {
+		LOGI("started");
+		return;
+	}
+
+	LOGI("starting");
 
 	jbyte *bytes;
 	char *c_name = ConvertJByteaArrayToChars(env, name, bytes);	
@@ -130,24 +131,24 @@ JNIEXPORT jint JNICALL Java_com_geniusgithub_mediarender_jni_PlatinumJniProxy_st
 	char *c_uuid = ConvertJByteaArrayToChars(env, uuid, bytes2); 
 	
 	LOGI("name =  %s, uuid = %s", c_name, c_uuid);
-	
-	if(mediaRenderDelegate == NULL)
-		mediaRenderDelegate = new PltMediaRendererDelegate();
 
-	mediaRenderer= new PLT_MediaRenderer(c_name,false,c_uuid);
+	mediaRenderDelegate = new PltMediaRendererDelegate();
+
+	mediaRenderer = new PLT_MediaRenderer(c_name, false, c_uuid);
 	mediaRenderer->SetDelegate(mediaRenderDelegate);
 
-	PLT_DeviceHostReference device1(mediaRenderer);
-	device = device1;
+	device = new PLT_DeviceHostReference(mediaRenderer);
 	
-	upnp.AddDevice(device);
-	ret = upnp.Start();
+	upnp.AddDevice(*device);
+	upnp.Start();
+
 	env->ReleaseByteArrayElements(name, bytes, JNI_ABORT);	
 	env->ReleaseByteArrayElements(uuid, bytes2, JNI_ABORT); 
-	delete c_name;	
-	delete c_uuid;
-	
-	return ret;	
+
+	// delete c_name;	
+	// delete c_uuid;
+
+	LOGI("started");
 }
 
 /*
@@ -158,14 +159,30 @@ JNIEXPORT jint JNICALL Java_com_geniusgithub_mediarender_jni_PlatinumJniProxy_st
 JNIEXPORT void JNICALL Java_com_geniusgithub_mediarender_jni_PlatinumJniProxy_stopMediaRender
 		(JNIEnv *env, jclass)
 {
+	if(mediaRenderDelegate == NULL || mediaRenderer == NULL || device == NULL) {
+		LOGI("stopped");
+		return;
+	}
 
-	NPT_LOG_INFO("stop");
-	LOGI("stop");
+	LOGI("stopping");
 
-	upnp.RemoveDevice(device);
+	upnp.RemoveDevice(*device);
+	LOGI("stopping-0");
 	upnp.Stop();
 
-	return ;
+	LOGI("stopping-1");
+	delete mediaRenderDelegate;
+	LOGI("stopping-2");
+	delete mediaRenderer;
+	LOGI("stopping-3");
+	delete device;
+	LOGI("stopping-4");
+
+	mediaRenderDelegate = NULL;
+	mediaRenderer = NULL;
+	device = NULL;
+
+	LOGI("stopped");
 }
 
 /*
@@ -173,7 +190,7 @@ JNIEXPORT void JNICALL Java_com_geniusgithub_mediarender_jni_PlatinumJniProxy_st
  * Method:    responseGenaEvent
  * Signature: (J)I
  */
-JNIEXPORT jboolean JNICALL Java_com_geniusgithub_mediarender_jni_PlatinumJniProxy_responseGenaEvent
+JNIEXPORT void JNICALL Java_com_geniusgithub_mediarender_jni_PlatinumJniProxy_responseGenaEvent
 		(JNIEnv *env, jclass, jint cmd, jbyteArray value, jbyteArray data)
 {
 //    NPT_LOG_INFO("response");
@@ -190,7 +207,5 @@ JNIEXPORT jboolean JNICALL Java_com_geniusgithub_mediarender_jni_PlatinumJniProx
 	env->ReleaseByteArrayElements(data, bytes2, JNI_ABORT);
 	delete c_value;	
 	delete c_data;
-
-	return true;
 }
 

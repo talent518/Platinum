@@ -101,15 +101,15 @@ end:
 NPT_Result
 PltMediaRendererDelegate::OnGetCurrentConnectionInfo(PLT_ActionReference& action)
 {
-	LOGI("connectInfo");
+	LOGI("OnGetCurrentConnectionInfo");
 	
-//	NPT_String curURI;	
-//	action->GetArgumentValue("CurrentTransportState", curURI);	
-//	NPT_String metaData;
-//	action->GetArgumentValue("CurrentURIMetaData", metaData); 
-//	LOGI("CurrentTransportState = %s",curURI.GetChars());
-//	ActionInflect(MEDIA_RENDER_CTL_MSG_PLAY, curURI.GetChars(),metaData.GetChars());
-	
+	NPT_String curURI;	
+	action->GetArgumentValue("CurrentTransportState", curURI);	
+	NPT_String metaData;
+	action->GetArgumentValue("CurrentURIMetaData", metaData); 
+	LOGI("CurrentTransportState = %s",curURI.GetChars());
+	ActionInflect(MEDIA_RENDER_CTL_MSG_PLAY, curURI.GetChars(),metaData.GetChars());
+
 	return NPT_SUCCESS;
 }
 /*----------------------------------------------------------------------
