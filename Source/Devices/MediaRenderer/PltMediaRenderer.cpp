@@ -223,7 +223,7 @@ PLT_MediaRenderer::SetupServices()
 |   PLT_MediaRenderer::UpdateServices
 +---------------------------------------------------------------------*/
 NPT_Result
-PLT_MediaRenderer::UpdateServices(const char* value,const char* data)
+PLT_MediaRenderer::UpdateServices(const char* value, const char* data)
 {
 
 	PLT_Service* serviceUpdate;
@@ -232,7 +232,6 @@ PLT_MediaRenderer::UpdateServices(const char* value,const char* data)
 		LOGI("cant find PLT_Service.....");
 		return NPT_FAILURE;
 	}
-	LOGI3("\n----UpdateServices----value =%s data =%s\n", value, data);
 
 	if(*(value+2) == ':' && *(value+5) == ':')
 	{
@@ -249,6 +248,7 @@ PLT_MediaRenderer::UpdateServices(const char* value,const char* data)
 	}
 	else
 	{
+		serviceUpdate->SetStateVariable("CurrentTransportState", value);
 		serviceUpdate->SetStateVariable("TransportState", value);
 	}
 
@@ -268,7 +268,7 @@ PLT_MediaRenderer::OnAction(PLT_ActionReference&          action,
 	NPT_String name = action->GetActionDesc().GetName();
 	NPT_String serviceType = action->GetActionDesc().GetService()->GetServiceType();
 
-	LOGI3("OnAction -> %s => %s", name.GetChars(), serviceType.GetChars());
+	LOGI3("OnAction 1-> %s => %s", name.GetChars(), serviceType.GetChars());
 
 	// since all actions take an instance ID and we only support 1 instance
 	// verify that the Instance ID is 0 and return an error here now if not
@@ -284,6 +284,8 @@ PLT_MediaRenderer::OnAction(PLT_ActionReference&          action,
 			return NPT_FAILURE;
 		}
 	}
+
+	LOGI3("OnAction 2-> %s => %s", name.GetChars(), serviceType.GetChars());
 
 	/* Is it a ConnectionManager Service Action ? */
 	if (name.Compare("GetCurrentConnectionInfo", true) == 0) {
@@ -336,6 +338,8 @@ PLT_MediaRenderer::OnAction(PLT_ActionReference&          action,
 	if (name.Compare("GetPositionInfo", true) == 0) {
 		return OnGetPositionInfo(action);
 	}
+
+	LOGI3("OnAction 3-> %s => %s", name.GetChars(), serviceType.GetChars());
 
 	// other actions rely on state variables
 	NPT_CHECK_LABEL_WARNING(action->SetArgumentsOutFromStateVariable(), failure);
@@ -416,6 +420,7 @@ PLT_MediaRenderer::OnPause(PLT_ActionReference& action)
 NPT_Result
 PLT_MediaRenderer::OnPlay(PLT_ActionReference& action)
 {
+	UpdateServices("TRANSITIONING", "");
 	if (m_Delegate) {
 		return m_Delegate->OnPlay(action);
 	}
@@ -464,9 +469,7 @@ PLT_MediaRenderer::OnStop(PLT_ActionReference& action)
 NPT_Result
 PLT_MediaRenderer::OnSetAVTransportURI(PLT_ActionReference& action)
 {
-	if (m_Delegate) {
-		return m_Delegate->OnSetAVTransportURI(action);
-	}
+	UpdateServices("NO_MEDIA_PRESENT", "");
 
 	// default implementation is using state variable
 	NPT_String uri;
@@ -481,6 +484,10 @@ PLT_MediaRenderer::OnSetAVTransportURI(PLT_ActionReference& action)
 	// update service state variables
 	serviceAVT->SetStateVariable("AVTransportURI", uri);
 	serviceAVT->SetStateVariable("AVTransportURIMetaData", metadata);
+
+	if (m_Delegate) {
+		return m_Delegate->OnSetAVTransportURI(action);
+	}
 
 	return NPT_SUCCESS;
 }

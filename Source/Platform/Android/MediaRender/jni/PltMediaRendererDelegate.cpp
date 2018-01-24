@@ -103,11 +103,11 @@ PltMediaRendererDelegate::OnGetCurrentConnectionInfo(PLT_ActionReference& action
 {
 	LOGI("OnGetCurrentConnectionInfo");
 	
-	NPT_String curURI;	
-	action->GetArgumentValue("CurrentTransportState", curURI);	
+	NPT_String curURI;
+	action->GetArgumentValue("CurrentTransportState", curURI);
 	NPT_String metaData;
-	action->GetArgumentValue("CurrentURIMetaData", metaData); 
-	LOGI("CurrentTransportState = %s",curURI.GetChars());
+	action->GetArgumentValue("CurrentURIMetaData", metaData);
+	LOGI("CurrentTransportState = %s, CurrentURIMetaData = %s", curURI.GetChars(), metaData.GetChars());
 	ActionInflect(MEDIA_RENDER_CTL_MSG_PLAY, curURI.GetChars(),metaData.GetChars());
 
 	return NPT_SUCCESS;
@@ -288,11 +288,8 @@ NPT_Result
 PltMediaRendererDelegate::OnGetVolumeDBRange(PLT_ActionReference& action)
 {
 	LOGI("OnGetVolumeDBRange");
-//	NPT_String curURI;	
-//	action->GetArgumentValue("CurrentURI", curURI);	
-//	NPT_String metaData;
-//	action->GetArgumentValue("CurrentURIMetaData", metaData); 
-//	ActionInflect(MEDIA_RENDER_CTL_MSG_PLAY, curURI.GetChars(),metaData.GetChars());
+
+	action->SetArgumentsOutFromStateVariable();
 
 	return NPT_SUCCESS;
 

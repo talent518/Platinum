@@ -170,13 +170,13 @@ JNIEXPORT void JNICALL Java_com_geniusgithub_mediarender_jni_PlatinumJniProxy_st
 	LOGI("stopping-0");
 	upnp.Stop();
 
-	LOGI("stopping-1");
+	/*LOGI("stopping-1");
 	delete mediaRenderDelegate;
 	LOGI("stopping-2");
 	delete mediaRenderer;
 	LOGI("stopping-3");
 	delete device;
-	LOGI("stopping-4");
+	LOGI("stopping-4");*/
 
 	mediaRenderDelegate = NULL;
 	mediaRenderer = NULL;
