@@ -261,7 +261,7 @@
             <argument>
                <name>CurrentVolume</name>
                <direction>out</direction>
-               <relatedStateVariable>VolumeDB</relatedStateVariable>
+               <relatedStateVariable>Volume</relatedStateVariable>
             </argument>
          </argumentList>
       </action>
@@ -281,12 +281,12 @@
             <argument>
                <name>MinValue</name>
                <direction>out</direction>
-               <relatedStateVariable>VolumeDB</relatedStateVariable>
+               <relatedStateVariable>VolumeMinValue</relatedStateVariable>
             </argument>
             <argument>
                <name>MaxValue</name>
                <direction>out</direction>
-               <relatedStateVariable>VolumeDB</relatedStateVariable>
+               <relatedStateVariable>VolumeMaxValue</relatedStateVariable>
             </argument>
          </argumentList>
       </action>
@@ -576,7 +576,7 @@
             <argument>
                <name>DesiredVolume</name>
                <direction>in</direction>
-               <relatedStateVariable>VolumeDB</relatedStateVariable>
+               <relatedStateVariable>Volume</relatedStateVariable>
             </argument>
          </argumentList>
       </action>
@@ -693,7 +693,15 @@
          </allowedValueRange>
       </stateVariable>
       <stateVariable sendEvents="no">
-         <name>VolumeDB</name>
+         <name>VolumeMinValue</name>
+         <dataType>i2</dataType>
+         <allowedValueRange>
+            <minimum>-32768</minimum>
+            <maximum>32767</maximum>
+         </allowedValueRange>
+      </stateVariable>
+      <stateVariable sendEvents="no">
+         <name>VolumeMaxValue</name>
          <dataType>i2</dataType>
          <allowedValueRange>
             <minimum>-32768</minimum>

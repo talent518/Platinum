@@ -86,7 +86,8 @@ public:
 
 	// PLT_DeviceHost methods
 	virtual NPT_Result SetupServices();
-	virtual NPT_Result UpdateServices(const char* value,const char* data);//add by pngcui
+	virtual NPT_Result UpdateServices(const char* value, const char* data);//add by pngcui
+	virtual NPT_Result UpdateRenderServices(const char* name, const char* value);//add by pngcui
 	virtual NPT_Result OnAction(PLT_ActionReference&          action, 
 								const PLT_HttpRequestContext& context);
 	virtual ~PLT_MediaRenderer();

@@ -205,10 +205,10 @@ PLT_MediaRenderer::SetupServices()
 
 		service->SetStateVariable("Mute", "0");
 		service->SetStateVariableExtraAttribute("Mute", "Channel", "Master");
-		service->SetStateVariable("Volume", "100");
+		service->SetStateVariable("Volume", "50");
 		service->SetStateVariableExtraAttribute("Volume", "Channel", "Master");
-		service->SetStateVariable("VolumeDB", "0");
-		service->SetStateVariableExtraAttribute("VolumeDB", "Channel", "Master");
+		service->SetStateVariable("VolumeMinValue", "0");
+		service->SetStateVariable("VolumeMaxValue", "100");
 
 		service->SetStateVariable("PresetNameList", "FactoryDefaults");
 
@@ -238,19 +238,38 @@ PLT_MediaRenderer::UpdateServices(const char* value, const char* data)
 		if(*(data+0) == 'd')
 		{
 			serviceUpdate->SetStateVariable("CurrentTrackDuration", value);
+			serviceUpdate->SetStateVariable("CurrentMediaDuration", value);
 		}
 		else
 		{
-			serviceUpdate->SetStateVariable("CurrentMediaDuration", value);
 			serviceUpdate->SetStateVariable("RelativeTimePosition", value);
 			serviceUpdate->SetStateVariable("AbsoluteTimePosition", value);
 		}
 	}
 	else
 	{
-		serviceUpdate->SetStateVariable("CurrentTransportState", value);
 		serviceUpdate->SetStateVariable("TransportState", value);
 	}
+
+	return NPT_SUCCESS;
+}
+
+/*----------------------------------------------------------------------
+|   PLT_MediaRenderer::UpdateRenderServices
++---------------------------------------------------------------------*/
+NPT_Result
+PLT_MediaRenderer::UpdateRenderServices(const char* name, const char* value)
+{
+
+	PLT_Service* serviceUpdate;
+	if(FindServiceByType("urn:schemas-upnp-org:service:RenderingControl:1", serviceUpdate) == NPT_ERROR_NO_SUCH_ITEM) {
+		LOGI("cant find PLT_Service.....");
+		return NPT_FAILURE;
+	}
+
+	LOGI3("UpdateRenderServices: %s => %s", name, value);
+
+	serviceUpdate->SetStateVariable(name, value);
 
 	return NPT_SUCCESS;
 }
@@ -510,6 +529,10 @@ PLT_MediaRenderer::OnSetPlayMode(PLT_ActionReference& action)
 NPT_Result
 PLT_MediaRenderer::OnSetVolume(PLT_ActionReference& action)
 {
+	NPT_String curURI;	
+	action->GetArgumentValue("DesiredVolume", curURI);
+	UpdateRenderServices("Volume", curURI.GetChars());
+
 	if (m_Delegate) {
 		return m_Delegate->OnSetVolume(action);
 	}
@@ -522,6 +545,10 @@ PLT_MediaRenderer::OnSetVolume(PLT_ActionReference& action)
 NPT_Result
 PLT_MediaRenderer::OnSetVolumeDB(PLT_ActionReference& action)
 {
+	NPT_String curURI;	
+	action->GetArgumentValue("DesiredVolume", curURI);
+	UpdateRenderServices("Volume", curURI.GetChars());
+
 	if (m_Delegate) {
 		return m_Delegate->OnSetVolumeDB(action);
 	}

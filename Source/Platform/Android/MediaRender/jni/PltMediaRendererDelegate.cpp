@@ -245,7 +245,6 @@ PltMediaRendererDelegate::OnSetPlayMode(PLT_ActionReference& action)
 	ActionInflect(MEDIA_RENDER_CTL_MSG_SETPLAYMODE, playMode.GetChars(),metaData.GetChars());
 
 	return NPT_SUCCESS;
-
 }
 /*----------------------------------------------------------------------
 |   PltMediaRendererDelegate::OnSetVolume
@@ -259,8 +258,8 @@ PltMediaRendererDelegate::OnSetVolume(PLT_ActionReference& action)
 	action->GetArgumentValue("DesiredVolume", curURI);
 	NPT_String metaData ;	
 	action->GetArgumentValue("Channel", metaData); 
-	LOGI("DesiredVolume = %s ,Channel = %s",curURI.GetChars(),metaData.GetChars());
-	ActionInflect(MEDIA_RENDER_CTL_MSG_SETVOLUME, curURI.GetChars(),metaData.GetChars());
+	LOGI("DesiredVolume = %s, Channel = %s", curURI.GetChars(), metaData.GetChars());
+	ActionInflect(MEDIA_RENDER_CTL_MSG_SETVOLUME, curURI.GetChars(), metaData.GetChars());
 
 	return NPT_SUCCESS;
 }
@@ -272,14 +271,14 @@ PltMediaRendererDelegate::OnSetVolumeDB(PLT_ActionReference& action)
 {
 	LOGI("OnSetVolumeDB");
 
-//	NPT_String curURI;	
-//	action->GetArgumentValue("CurrentURI", curURI);	
-//	NPT_String metaData ;	
-//	action->GetArgumentValue("CurrentURIMetaData", metaData); 
-//	ActionInflect(MEDIA_RENDER_CTL_MSG_SETVOLUME, curURI.GetChars(),metaData.GetChars());
+	NPT_String curURI;	
+	action->GetArgumentValue("DesiredVolume", curURI);
+	NPT_String metaData ;	
+	action->GetArgumentValue("Channel", metaData); 
+	LOGI("DesiredVolume = %s, Channel = %s", curURI.GetChars(), metaData.GetChars());
+	ActionInflect(MEDIA_RENDER_CTL_MSG_SETVOLUME, curURI.GetChars(), metaData.GetChars());
 
 	return NPT_SUCCESS;
-
 }
 /*----------------------------------------------------------------------
 |   PltMediaRendererDelegate::OnGetVolumeDBRange
@@ -306,8 +305,8 @@ PltMediaRendererDelegate::OnSetMute(PLT_ActionReference& action)
 	action->GetArgumentValue("DesiredMute", curURI);	
 	NPT_String metaData ;	
 	action->GetArgumentValue("CurrentURIMetaData", metaData); 
-	LOGI("value = %s,data = %s",curURI.GetChars(),metaData.GetChars());
-	ActionInflect(MEDIA_RENDER_CTL_MSG_SETMUTE, curURI.GetChars(),metaData.GetChars());
+	LOGI("value = %s, data = %s", curURI.GetChars(), metaData.GetChars());
+	ActionInflect(MEDIA_RENDER_CTL_MSG_SETMUTE, curURI.GetChars(), metaData.GetChars());
 
 	return NPT_SUCCESS;
 }

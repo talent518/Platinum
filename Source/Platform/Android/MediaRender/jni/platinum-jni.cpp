@@ -199,9 +199,9 @@ JNIEXPORT void JNICALL Java_com_geniusgithub_mediarender_jni_PlatinumJniProxy_re
 	jbyte *bytes2;
 	char *c_data = ConvertJByteaArrayToChars(env, data, bytes2);
 
-	LOGI("ResponseGenaEvent value = %s data = %s",c_value,c_data);
+	LOGI("ResponseGenaEvent value = %s data = %s",c_value, c_data);
 	
-	mediaRenderer->UpdateServices(c_value,c_data);
+	mediaRenderer->UpdateServices(c_value, c_data);
 	
 	env->ReleaseByteArrayElements(value, bytes, JNI_ABORT);
 	env->ReleaseByteArrayElements(data, bytes2, JNI_ABORT);
